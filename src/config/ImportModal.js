@@ -60,7 +60,14 @@ const ImportModal = ({isOpen, close, palette, setPalette}) => {
         <Modal isOpen={ isOpen } close={ close } style={ customStyles }>
             <h3>
                 Import palette
-                <a className="close" aria-label="Close Dialog" href="#" onClick={ close }>x</a>
+                <a
+                    className="close"
+                    aria-label="Close Dialog"
+                    href="#"
+                    onClick={ ev => {
+                        ev.preventDefault()
+                        close()
+                    }}>x</a>
             </h3>
             <textarea
                 cols={ 40 }

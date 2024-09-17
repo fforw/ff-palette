@@ -38,7 +38,10 @@ const Config = ({palette, setPalette, strategy, setStrategy, strategies, debug, 
                 className="ui-control"
                 href="#"
                 title="Toggle sidebar"
-                onClick={ ev => setPanelActive(!panelActive)}>
+                onClick={ ev => {
+                    ev.preventDefault()
+                    setPanelActive(!panelActive)
+                }}>
                 { panelActive ? "<" : ">" }
             </a>
             <h3>
@@ -128,7 +131,12 @@ const Config = ({palette, setPalette, strategy, setStrategy, strategies, debug, 
 
                         return (
                             <li key={ name } className={ cx( s === strategy && "active" ) }>
-                                <a href="#" onClick={ ev => setStrategy(s) }>
+                                <a
+                                    href="#"
+                                    onClick={ ev => {
+                                        ev.preventDefault()
+                                        setStrategy(s)
+                                } }>
                                     <span className="name">{ name }</span> - <span className="desc">{ desc }</span>
                                 </a>
                             </li>

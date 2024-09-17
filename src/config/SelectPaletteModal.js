@@ -23,7 +23,15 @@ const SelectPaletteModal = ({isOpen, close, choose}) => {
         <Modal isOpen={isOpen} close={close} style={customStyles}>
             <h3>
                 Select Palette
-                <a className="close" href="#" onClick={ close }>x</a>
+                <a
+                    className="close"
+                    href="#"
+                    onClick={ ev => {
+                        ev.preventDefault()
+                        close()
+                    } }>
+                    x
+                </a>
             </h3>
             {
                 (
