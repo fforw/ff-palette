@@ -10,7 +10,6 @@ const customStyles = {
         zIndex    : '20',
     },
     content : {
-        top                   : '50%',
         left                  : '50%',
         width                  : '400px',
         marginRight           : '-200px',
