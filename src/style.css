@@ -53,19 +53,33 @@ button.color:focus,button.color:hover
     border: 1px solid #fff;
 }
 
-#ui
+.ui-panel
 {
     position: absolute;
     background: rgba(0,0,0,0.65);
     color: #fff;
-    top:0;
-    width: 28%;
+    top: 0;
+    left: -420px;
+    width: 400px;
     overflow: auto;
     height: 100vh;
     z-index: 10;
-    padding: 0 2ex;
+    padding: 0 20px;
+    transition: left ease-in 0.2s;
+}
+.ui-panel.open
+{
+    left: 0
 }
 
+a.ui-control
+{
+    position: absolute;
+    top: 0;
+    right: 4px;
+    text-decoration: none;
+    color: #fff;
+}
 ul.box
 {
     margin: 1em 0;
@@ -99,8 +113,8 @@ ul.box a
 ul.box a:hover,ul.box a:focus
 {
     text-decoration: none;
-    color: #f80;
-    border: 1px solid #f80;
+    color: #c59860;
+    border: 1px solid #c59860;
 }
 
 ul.box .name{

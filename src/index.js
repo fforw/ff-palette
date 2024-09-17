@@ -21,7 +21,8 @@ const SPREAD_SIZE = 24
 
 const config = {
     width: 0,
-    height: 0
+    height: 0,
+    debug: false
 };
 
 /**
@@ -186,32 +187,33 @@ const paint = (palette) => {
     ctx.fillStyle = "#000";
     ctx.fillRect(0,0, width, height);
 
-    const diagram = v(pts);
+    if (config.debug)
+    {
+        for (let i = 0; i < pts.length; i++)
+        {
+            const [x, y] = pts[i]
+            const col = colors[i]
 
-    // ctx.beginPath()
-    // ctx.moveTo(cx + radius, cy)
-    // ctx.arc(cx, cy,radius,0,TAU,true)
-    // ctx.clip()
+            ctx.fillStyle = col
+            ctx.fillRect(x - 1, y - 1, 2, 2)
+            
+        }
 
-    let hue = 0
-    diagram.polygons().forEach(
-        (p, idx) => {
+    }
+    else
+    {
+        const diagram = v(pts);
 
-            ctx.fillStyle = colors[idx]
-            ctx.strokeStyle = colors[idx]
-            ctx.lineWidth = 2
-            drawPolygon(ctx, p)
-        })
+        let hue = 0
+        diagram.polygons().forEach(
+            (p, idx) => {
 
-    // for (let i = 0; i < pts.length; i++)
-    // {
-    //     const [x, y] = pts[i]
-    //     const c = colors[i]
-    //
-    //     ctx.fillStyle = getLuminance(Color.from(c)) < 131237 ? "#fff" : "#000"
-    //     ctx.fillText(String(i),x,y)
-    //
-    // }
+                ctx.fillStyle = colors[idx]
+                ctx.strokeStyle = colors[idx]
+                ctx.lineWidth = 2
+                drawPolygon(ctx, p)
+            })
+    }
 
     ctx.restore()
 }
@@ -266,6 +268,12 @@ domready(
             root.render(
                 <>
                     <Config
+                        debug={ config.debug }
+                        setDebug={ d => {
+                            config.debug = d
+                            strategy.fn(palette)
+                            render()
+                        }}
                         palette={ palette }
                         setPalette={
                             p => {

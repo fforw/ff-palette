@@ -3,7 +3,6 @@ import cx from "classnames"
 import Color from "../Color"
 import { toast } from 'react-toastify';
 
-const TOAST_ERROR_OPTIONS = {type: "error", autoClose: 1500, align: "center"}
 
 const ImportControl = ({palette, setPalette}) => {
 
@@ -31,34 +30,6 @@ const ImportControl = ({palette, setPalette}) => {
                     timerRef.current = setTimeout(
                         () => {
 
-                            let data = null
-                            try
-                            {
-                                data = JSON.parse(value)
-                            }
-                            catch(e)
-                            {
-                                toast("Error parsing JSON: " + e, TOAST_ERROR_OPTIONS)
-                            }
-
-                            if (data && Array.isArray(data))
-                            {
-                                let valid = true
-                                for (let i = 0; i < data.length; i++)
-                                {
-                                    const color = data[i]
-                                    if (!Color.validate(color))
-                                    {
-                                        toast("Invalid color " + color, TOAST_ERROR_OPTIONS)
-                                        valid = false
-                                    }
-                                }
-
-                                if (valid)
-                                {
-                                    setPalette(data)
-                                }
-                            }
                         },
                         400
                     )

@@ -1,5 +1,4 @@
 const ActiveState = {
-    IMPORT: -2,
     NONE: -1,
 }
 

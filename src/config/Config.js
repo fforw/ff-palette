@@ -10,14 +10,14 @@ import { HexColorPicker } from "react-colorful"
 const random = rndFromArray(allPalettesWithBlack)
 
 import { ToastContainer, toast } from 'react-toastify';
-import ImportControl from "./ImportControl"
 import ActiveState from "./ActiveState"
 import SelectPaletteModal from "./SelectPaletteModal"
+import ImportModal from "./ImportModal"
 
-const Config = ({palette, setPalette, strategy, setStrategy, strategies}) => {
+const Config = ({palette, setPalette, strategy, setStrategy, strategies, debug, setDebug}) => {
 
+    /* we buffer the last active color value to make "disabling" the control less jarring */
     const activeRef = useRef(null)
-
     const [active, _setActive] = useState(ActiveState.NONE)
 
     const setActive = a => {
@@ -25,27 +25,41 @@ const Config = ({palette, setPalette, strategy, setStrategy, strategies}) => {
         _setActive(a)
     }
 
-    const [selectDialogOpen, setSelectDialogOpen] = useState(false)
+    const [panelActive, setPanelActive] = useState(true)
 
+    const [selectDialogOpen, setSelectDialogOpen] = useState(false)
+    const [importDialogOpen, setImportDialogOpen] = useState(false)
+
+    let deactivatedColor = activeRef.current !== null ? palette[activeRef.current] : "#000"
     return (
-        <>
+        <div className={cx("ui-panel", panelActive && "open")}>
+            {/* Sidebar toggle */}
+            <a
+                className="ui-control"
+                href="#"
+                title="Toggle sidebar"
+                onClick={ ev => setPanelActive(!panelActive)}>
+                { panelActive ? "<" : ">" }
+            </a>
             <h3>
                 Natural Color Mixing tool
                 <small>Generate palette images based on <a href="https://github.com/rvanwijnen/spectral.js">spectral.js</a> natural color mixing.</small>
             </h3>
 
-
+            {/* Toolbar */}
             <div>
                 <button
                     type="button"
+                    title="JSON import/export"
                     onClick={ () => {
-                        setActive(active === ActiveState.IMPORT ? ActiveState.NONE : ActiveState.IMPORT)
+                        setImportDialogOpen(true)
                     } }
                 >
                     Import
                 </button>
                 <button
                     type="button"
+                    title="Copy palette JSON to clipboard"
                     onClick={ () => {
                         clipboard.write(
                             JSON.stringify(palette, null, 4)
@@ -68,42 +82,29 @@ const Config = ({palette, setPalette, strategy, setStrategy, strategies}) => {
                 <button
                     type="button"
                     onClick={ () => setSelectDialogOpen(true) }
+                    title="Select palette from a set of predefined palettes"
                 >
                     Select
                 </button>
                 <hr className="divider"/>
-                {
-                    active === ActiveState.IMPORT && (
-                               <ImportControl
-                                   palette={ palette }
-                                   setPalette={ setPalette }
-                               />
-                           )
-                }
-                {
-                    active < 0 && (
-                        <div className="cover">
-                               <HexColorPicker
-                                   color={ activeRef.current !== null ? palette[activeRef.current] : "#000" }
-                               />
-                        </div>
-                    )
-                }
-                {
-                    active >= 0 && (
-                               <HexColorPicker
-                                   color={ palette[active] }
-                                   onChange={
-                                       col => {
-                                           const newPalette = palette.slice()
-                                           newPalette[active] = col
-                                           setPalette(newPalette)
-                                       }
-                                   }
-                               />
-                           )
-                }
+
+                {/* Active color picker */}
+                <div className={ cx(active < 0 && "cover") }>
+                       <HexColorPicker
+                           color={ active < 0 ? deactivatedColor : palette[active] }
+                           onChange={
+                               active >= 0 ?
+                                   col => {
+                                       const newPalette = palette.slice()
+                                       newPalette[active] = col
+                                       setPalette(newPalette)
+                                   } : null
+                           }
+                       />
+                </div>
             </div>
+
+            {/* Current palette buttons  */}
             <p>
             {
                     palette.map((c, index) => (
@@ -117,6 +118,8 @@ const Config = ({palette, setPalette, strategy, setStrategy, strategies}) => {
                     ))
                 }
             </p>
+
+            {/* Strategy selection list */}
             <ul className="box">
                 {
                     strategies.map(s => {
@@ -133,8 +136,18 @@ const Config = ({palette, setPalette, strategy, setStrategy, strategies}) => {
                     })
                 }
             </ul>
+            {/* Strategy option(s) */}
+            <div>
+                <label>
+                    <input type="checkbox" name="debug" checked={ debug } onChange={ () => setDebug(!debug) }/>
+                    Debug
+                </label>
+            </div>
+
+            {/* MODALS */}
+
             <SelectPaletteModal
-                isOpen={selectDialogOpen}
+                isOpen={ selectDialogOpen }
                 close={ () => setSelectDialogOpen(false) }
                 choose={
                     p => {
@@ -144,7 +157,20 @@ const Config = ({palette, setPalette, strategy, setStrategy, strategies}) => {
                 }
 
             />
-        </>
+
+            <ImportModal
+                isOpen={ importDialogOpen }
+                close={ () => setImportDialogOpen(false) }
+                palette={ palette }
+                setPalette={
+                    p => {
+                        setPalette(p)
+                        setImportDialogOpen(false)
+                    }
+                }
+            />
+
+        </div>
     )
 }
 
