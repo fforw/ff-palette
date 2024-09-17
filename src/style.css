@@ -12,6 +12,7 @@ body
     position: absolute;
     left:0;
     top:0;
+    z-index: 0;
 }
 
 
@@ -24,4 +25,122 @@ body
     color: #fff;
     font-family: monospace;
     font-size: 0.8rem;
+}
+
+button
+{
+    border: 1px solid #000;
+    color: #fff;
+    padding: 6px;
+    background: rgba(63, 70, 87, 0.27);
+}
+
+button.color .inner
+{
+    display: inline-block;
+}
+
+.divider
+{
+    display: block;
+    height: 1px;
+    border-bottom: 1px solid #fff;
+}
+
+
+button.color:focus,button.color:hover
+{
+    border: 1px solid #fff;
+}
+
+#ui
+{
+    position: absolute;
+    background: rgba(0,0,0,0.65);
+    color: #fff;
+    top:0;
+    width: 28%;
+    overflow: auto;
+    height: 100vh;
+    z-index: 10;
+    padding: 0 2ex;
+}
+
+ul.box
+{
+    margin: 1em 0;
+    padding: 0;
+}
+
+ul.box li
+{
+    list-style: none;
+    margin: 0.5em 0;
+}
+
+a
+{
+    color: #ccc;
+}
+
+a:visited
+{
+    color: #888;
+}
+
+ul.box a
+{
+    display: block;
+    border: 1px solid #ccc;
+    text-decoration: none;
+    padding: 1em 2ex;
+}
+
+ul.box a:hover,ul.box a:focus
+{
+    text-decoration: none;
+    color: #f80;
+    border: 1px solid #f80;
+}
+
+ul.box .name{
+
+    font-weight: bold;
+}
+
+ul.box li.active .name {
+    text-decoration: underline;
+}
+
+ul.box li.active {
+    background: rgba(255,255,255, 0.15);
+}
+
+ul.box li.active a {
+    border-width: 2px;
+}
+
+ul.box .desc{
+    color: #888;
+}
+
+
+.close
+{
+    text-decoration: none;
+    color: #fff;
+    float: right;
+}
+
+.cover
+{
+    opacity: 0.25;
+    pointer-events: none;
+}
+
+h3 small
+{
+    font-size: 0.65em;
+    color: #888;
+    display: block;
 }
